@@ -41,7 +41,7 @@ def readData():
     print(temp_raw)
 
 def Store_Raw_Data():
-    x = Pin, SoftSPI
+    x = x
 
 
 def Store_Data_Filtered():
