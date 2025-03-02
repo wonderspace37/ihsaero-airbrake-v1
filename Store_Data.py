@@ -1,7 +1,10 @@
+import micropython
 import os
-from machine import Pin, SoftSPI
+from machine import Pin, SoftSPI, I2C
 from sdcard import SDCard
 from imu_libs.mpu9250 import MPU9250
+from imu_libs.ak8963 import AK8963
+from imu_libs.mpu6050 import MPU6050
 import numpy as np
 
 acc_Raw = np.array([0, 0, 0])
@@ -17,17 +20,33 @@ temp_Filtered = 0
 sclPin = 22
 sdaPin = 21
 
-micropython.alloc_emergency_exception_buf(100)
+def Read_Setup():
+    micropython.alloc_emergency_exception_buf(100)
 
-i2c = I2C(scl=Pin(sclPin), sda=Pin(sdaPin))
+    i2c = I2C(scl=Pin(sclPin), sda=Pin(sdaPin))
 
-dummy = MPU9250(i2c)  # this opens the bybass to access to the AK8963 and MPU 6050
-ak8963 = AK8963(i2c)
-mpu6050 = MPU6050(i2c)
-offset_mag, scale_mag = ak8963.calibrate(count=256, delay=200)
-offset_gyro, scale_gyro = mpu6050.calibrate(count=256, delay=200)
+    dummy = MPU9250(i2c)  # this opens the bybass to access to the AK8963 and MPU 6050
+    ak8963 = AK8963(i2c)
+    mpu6050 = MPU6050(i2c)
+    offset_mag, scale_mag = ak8963.calibrate(count=256, delay=200)
+    offset_gyro, scale_gyro = mpu6050.calibrate(count=256, delay=200)
 
-sensor = MPU9250(i2c, ak8963=ak8963, mpu6500=mpu6500)
+    sensor = MPU9250(i2c, ak8963=ak8963, mpu6500=mpu6500)
+    print("MPU9250 id: " + hex(sensor.whoami))
+
+    spisd = SoftSPI(miso=Pin(14), mosi=Pin(12), sck=Pin(13))
+    sd = SDCard(spisd, Pin(10))
+
+    print('root directory: {}'.format(os.listdir()))
+    vfs = os.VfsFat(sd)
+    os.mount(vfs, '/sd')
+    print('root directory: {}'.format(os.listdir()))
+    os.chdir('/sd')
+    print('SD card contains: {}'.format(os.listdir()))
+
+    f = open('/sd/Data.txt', 'w')
+    f.write('Bitch we start.\n')
+    f.close()
 
 def readData():
     acc_Raw[0], acc_Raw[1], acc_Raw[2] = sensor.acceleration
@@ -40,9 +59,8 @@ def readData():
     print(mag_Raw[0], mag_Raw[1], mag_Raw[2]),
     print(temp_raw)
 
-def Store_Raw_Data():
-    x = x
-
+def Store_Data_Raw():
+    f = open('/sd/Data.txt', 'a')
 
 def Store_Data_Filtered():
     x = x
