@@ -106,7 +106,11 @@ def push_gyroz_Filtered():
     return gyro_Filtered[2]
 
 def push_magx_Filtered():
-    return mag_Filtered
+    return mag_Filtered[0]
+def push_magy_Filtered():
+    return mag_Filtered[1]
+def push_magz_Filtered():
+    return mag_Filtered[2]
 
 def push_temp_Raw():
     return temp_Raw
