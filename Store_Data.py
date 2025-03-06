@@ -45,7 +45,7 @@ def Read_Setup():
     print('SD card contains: {}'.format(os.listdir()))
 
     f = open('/sd/Data.txt', 'w')
-    f.write('Bitch we start.\n')
+    f.write('Bitch we start')
     f.close()
 
 def readData():
@@ -54,13 +54,62 @@ def readData():
     mag_Raw[0], mag_Raw[1], mag_Raw[2] = sensor.magnetic
     temp_raw = sensor.temperature
 
-    print(acc_Raw[0], acc_Raw[1], acc_Raw[2]),
-    print(gyro_Raw[0], gyro_Raw[1], gyro_Raw[2]),
-    print(mag_Raw[0], mag_Raw[1], mag_Raw[2]),
+    print(acc_Raw[0], acc_Raw[1], acc_Raw[2])
+    print(gyro_Raw[0], gyro_Raw[1], gyro_Raw[2])
+    print(mag_Raw[0], mag_Raw[1], mag_Raw[2])
     print(temp_raw)
 
 def Store_Data_Raw():
+    readData()
     f = open('/sd/Data.txt', 'a')
+    f.write('acc data: ', acc_Raw, ' gyro data: ', gyro_Raw, ' mag data: ', mag_Raw)
+    f.close()
 
 def Store_Data_Filtered():
-    x = x
+    f = open('/sd/Data.txt', 'a')
+    f.write('acc data: ', acc_Filtered, ' gyro data: ', gyro_, ' mag data: ', mag_Raw)
+    f.close()
+
+def push_accx_Raw():
+    return acc_Raw[0]
+def push_accy_Raw():
+    return acc_Raw[1]
+def push_accz_Raw():
+    return acc_Raw[2]
+
+def push_gyrox_Raw():
+    return gyro_Raw[0]
+def push_gyroy_Raw():
+    return gyro_Raw[1]
+def push_gyroz_Raw():
+    return gyro_Raw[2]
+
+def push_magx_Raw():
+    return mag_Raw[0]
+def push_magy_Raw():
+    return mag_Raw[1]
+def push_magz_Raw():
+    return mag_Raw[2]
+
+def push_accx_Filtered():
+    return acc_Filtered[0]
+def push_accy_Filtered():
+    return acc_Filtered[1]
+def push_accz_Filtered():
+    return acc_Filtered[2]
+
+def push_gyrox_Filtered():
+    return gyro_Filtered[0]
+def push_gyroy_Filtered():
+    return gyro_Filtered[1]
+def push_gyroz_Filtered():
+    return gyro_Filtered[2]
+
+def push_magx_Filtered():
+    return mag_Filtered
+
+def push_temp_Raw():
+    return temp_Raw
+
+def push_temp_Filtered():
+    return temp_Filtered
